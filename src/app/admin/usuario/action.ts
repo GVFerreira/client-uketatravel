@@ -14,3 +14,22 @@ export async function getUsers() {
   
   return result
 }
+
+interface createUserRequest {
+  name: string
+  email: string
+  password: string
+}
+
+interface createUserResponse {
+  status: number
+  message: string
+}
+
+export async function createUser(data: createUserRequest) {
+  const result = await api.post('users', {
+    json: data
+  }).json<createUserResponse>()
+
+  return result
+}

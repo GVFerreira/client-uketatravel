@@ -1,5 +1,5 @@
-import AddUser from "./add-user"
-import Users from "./users-table"
+import AddUser from "./components/add-user"
+import UserListWrapper from "./components/users"
 
 export default function Destino() {
   return (
@@ -9,7 +9,7 @@ export default function Destino() {
         <AddUser />
       </div>
       <div className="border shadow-sm rounded-lg">
-        <Users />
+        <UserListWrapper />
       </div>
     </main>
   )

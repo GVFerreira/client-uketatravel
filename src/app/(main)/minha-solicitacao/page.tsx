@@ -67,7 +67,7 @@ export default function MinhaSolicitacao() {
   const traduzirStatus = (status: string) => {
     const statusMap: Record<string, { label: string; color: string }> = {
       "Solicitação em análise interna": { label: "Solicitação em análise interna", color: "bg-yellow-100 text-yellow-800" },
-      "Enviado ao Governo": { label: "Em processamento", color: "bg-blue-100 text-blue-800" },
+      "Recebido pelo Governo UK": { label: "Em processamento", color: "bg-blue-100 text-blue-800" },
       "Aprovado": { label: "Aprovado", color: "bg-green-100 text-green-800" },
       "Rejeitado": { label: "Rejeitado", color: "bg-red-100 text-red-800" },
     }

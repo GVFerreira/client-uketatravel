@@ -1,8 +1,6 @@
 'use client'
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import { getUsers } from './action'
-import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 interface User {
@@ -14,16 +12,7 @@ interface User {
   updatedAt: Date
 }
 
-export default function Users() {
-  const [users, setUsers] = useState<User[]>([])
-
-  useEffect(() => {
-    async function fetchUsers() {
-      const data: User[] = await getUsers()
-      setUsers(data)
-    }
-    fetchUsers()
-  }, [])
+export default function Users({ initialUsers }: { initialUsers: User[] }) {
 
   return (
     <Table>
@@ -35,7 +24,7 @@ export default function Users() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map((user, index) => (
+        {initialUsers.map((user, index) => (
           <TableRow key={index}>
             <TableCell>
               <Avatar>

@@ -59,13 +59,6 @@ export default function SolicitationsTable({ data }: { data: GetSolicitationsRes
   const handlePaymentFilter = (option: string | null) => setPaymentFilter(option === 'all' ? null : option)
   const toggleSortOrder = () => setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))
   const handleLimitChange = (option: string | null) => setLimit(option ? parseInt(option) : 25)
-
-  function capitalizeWords(str: string) {
-    return str
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  }  
   
   return (
     <div className="px-8 space-y-12">
@@ -142,30 +135,28 @@ export default function SolicitationsTable({ data }: { data: GetSolicitationsRes
 
       <div>
         {filteredSolicitations.map((solicitation, index) => (
-          <div key={index} className="border border-muted-foreground">
+          <div key={index} className="border-t border-t-muted-foreground">
             <div className="flex justify-between items-center py-2 px-6 bg-muted">
-              <h2 className="font-bold text-2xl">{capitalizeWords(`${solicitation.name} ${solicitation.surname}`)}</h2>
+              <h2 className="font-bold text-2xl capitalize">{`         ${solicitation.name} ${solicitation.surname}`}</h2>
               <div className="text-right">
                 <span className="text-sm">Criado: {new Date(solicitation.createdAt).toLocaleString("pt-br")}</span> <br />
                 <span className="text-sm">Atualizado: {new Date(solicitation.updatedAt).toLocaleString("pt-br")}</span>
               </div>
             </div>
             <div className="bg-muted-foreground/10 flex flex-row justify-between items-center py-2 px-6">
-              <div>
+              <div className="w-[100px] h-[133px] aspect-[3/4] border-2 bg-muted-foreground flex items-center justify-center">
                 { solicitation.profilePhotoUrl ?
-                  <>
-                    <Image src={`http://localhost:3000/${solicitation.profilePhotoUrl}`} width={300} height={300} alt={solicitation.name + solicitation.surname} className="w-full max-w-[100px] aspect-[3/4] object-cover max-h-xs border-2 border-gray-300" />
-                  </>
+                  <Image src={`http://localhost:3000/${solicitation.profilePhotoUrl}`} width={300} height={300} alt={solicitation.name + solicitation.surname} />
                   :
-                  <div className="flex max-w-[180px] w-full justify-center items-center aspect-[3/4] max-h-xs border-2 bg-gray-300">
-                    <p className="text-center">Sem<br />imagem</p>
+                  <div >
+                    <p className="text-center text-foreground">Sem<br />imagem</p>
                   </div>
                 }
               </div>
               <div className="px-8 w-full grid grid-cols-3">
-                <div>
-                  <p><b>Cód. acompanhamento:</b> </p>
-                  <p><b>Número passaporte:</b> {solicitation.passportNumber}</p>
+                <div className="text-lg font-medium">
+                  <p>Número passaporte:</p>
+                  <p>{solicitation.passportNumber}</p>
                 </div>
                 <div>
                   <p><b>E-mail:</b> {solicitation.email}</p>
@@ -638,7 +629,6 @@ export default function SolicitationsTable({ data }: { data: GetSolicitationsRes
                 </div>
               </div>
             </div>
-            <hr className="border-black" />
           </div>
         ))}
       </div>

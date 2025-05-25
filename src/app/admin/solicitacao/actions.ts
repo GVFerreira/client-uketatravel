@@ -64,3 +64,40 @@ export async function getSolicitation(id: string) {
 
   return result
 }
+
+export async function updateStatus(data: {id: string, name: string, status: string, email: string, attachmentPath: string | null}) {
+  try {
+    const update = await api.put('solicitation/update-status', {
+      json: {
+        id: data.id,
+        status: data.status,
+        attachmentPath: data.attachmentPath
+      }
+    }).json()
+
+    return update
+  } catch(e) {
+    console.log(e)
+    return null
+  }
+}
+
+interface updateEmailResponse {
+  solicitationId: string
+}
+
+export async function updateEmail({ id, email }: {id: string, email: string}) {
+  try {
+    const update = await api.put('solicitation/update-email', {
+      json: {
+        id,
+        email
+      }
+    }).json<updateEmailResponse>()
+
+    return update
+  } catch(e) {
+    console.log(e)
+    return null
+  }
+}

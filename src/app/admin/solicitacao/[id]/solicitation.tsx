@@ -1,11 +1,53 @@
 import { getSolicitation } from "../actions"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Check, X, FileImage, User, CreditCard, Phone, Gavel, Pencil, Trash2 } from "lucide-react"
 import Image from "next/image"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "@/components/ui/table"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger
+} from "@/components/ui/tabs"
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent, AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
+} from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Check, X, FileImage, User, CreditCard, Phone, Gavel, Pencil, Trash2 } from "lucide-react"
+
+// import { Label } from "@/components/ui/label"
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import UpdateStatus from "./components/update-status"
+import UpdateEmail from "./components/update-email"
+
+interface updateEmail {
+  id: string
+  email: string
+}
+
+interface sendMessage {
+  id: string
+  message: string
+}
 
 export default async function SolicitationDetailsComponent({ id }: { id: string }) {
   const solicitation = await getSolicitation(id)
@@ -41,9 +83,45 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
           <h1 className="text-3xl font-bold tracking-tight">Detalhes da Solicitação</h1>
           <p className="text-muted-foreground">ID: {solicitation.id}</p>
           <div className="grid grid-cols-2 gap-4 md:w-1/3 mt-2">
-            <Button className="bg-yellow-500 hover:bg-yellow-400 transition-all">
-              <Pencil className="size-4 text-yellow-800" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="bg-yellow-500 hover:bg-yellow-400 transition-all">
+                  <Pencil className="size-4 text-yellow-800" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="p-4">
+                <AlertDialogHeader className="border-b py-2">
+                  <div className="flex justify-between items-center">
+                    <AlertDialogTitle className="text-2xl font-bold">Gerenciar solicitação</AlertDialogTitle>
+                    <AlertDialogCancel>
+                      <X className="size-6" />
+                    </AlertDialogCancel>
+                  </div>
+                </AlertDialogHeader>
+                <p className="capitalize"><b>Cliente: {`${solicitation.name} ${solicitation.surname}`}</b></p>
+                <Tabs defaultValue="update">
+                  <TabsList className="w-full">
+                    <TabsTrigger value="update">Atualizar status</TabsTrigger>
+                    <TabsTrigger value="email">Atualizar e-mail</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="update">
+                    <UpdateStatus data={{
+                      id: solicitation.id,
+                      name: solicitation.name,
+                      email: solicitation.email,
+                      status: solicitation.status,
+                      passportNumber: solicitation.passportNumber,
+                    }}/>
+                  </TabsContent>
+
+                  <TabsContent value="email">
+                    <UpdateEmail data={{id: solicitation.id, email: solicitation.email}}/>
+                  </TabsContent>
+                </Tabs>
+              </AlertDialogContent>
+            </AlertDialog>
+            
             <Button className="bg-red-600 hover:bg-red-500 transition-all">
               <Trash2 className="size-4 text-red-100" />
             </Button>
@@ -386,3 +464,84 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
     </div>
   )
 }
+
+// function UpdateEmail({data}: {data: updateEmail}) {
+//   const { register, handleSubmit, formState } = useForm<updateEmail>()
+//   const router = useRouter()
+  
+//   const handleUpdateEmail: SubmitHandler<updateEmail> = async (data) => {
+//     try {
+//       await updateEmail(data)
+
+//       router.refresh()
+
+//       toast({
+//         variant: "success",
+//         title: "Atualizado com sucesso",
+//         description: "O e-mail deste cliente foi atualizado com sucesso"
+//       })
+//     } catch(e) {
+//       console.log(e)
+//       toast({
+//         variant: "destructive",
+//         title: "Erro",
+//         description: "Não foi possível atualizar o e-mail deste cliente"
+//       })
+//     }
+//   }
+
+//   return (
+//     <form className="space-y-4 pb-4 px-4" onSubmit={handleSubmit(handleUpdateEmail)}>
+//       <Input value={data.id} className="hidden" {...register('id')} />
+//       <div>
+//         <Label>E-mail atual</Label>
+//         <Input 
+//           defaultValue={data.email}
+//           {...register('email')}
+//         /> 
+//       </div>
+//       <Button type="submit" disabled={formState.isSubmitting}>
+//         {formState.isSubmitting ? <><p>Atualizando e-mail...</p><LoadingSpinner /></> : "Atualizar e-mail"}
+//       </Button>
+//     </form>
+//   )
+// }
+
+// function SendMessage({data}: {data: sendMessage}) {
+//   const { register, handleSubmit, formState } = useForm<sendMessage>()
+//   const router = useRouter()
+  
+//   const handleSendMessage: SubmitHandler<sendMessage> = async (data) => {
+//     try {
+//       await sendMessage(data)
+
+//       router.refresh()
+
+//       toast({
+//         variant: "success",
+//         title: "Mensagem adicionada",
+//         description: "A mensagem foi adicionada com sucesso"
+//       })
+//     } catch(e) {
+//       console.log(e)
+//       toast({
+//         variant: "destructive",
+//         title: "Erro",
+//         description: "Não foi possível atualizar o e-mail deste cliente"
+//       })
+//     }
+//   }
+
+//   return (
+//     <form className="p-4 space-y-4" onSubmit={handleSubmit(handleSendMessage)}>
+//       <Input value={data.id} className="hidden" {...register('id')} />
+//       <div>
+//         <Label htmlFor="message">Mensagem ao aplicante:</Label>
+//         <Textarea id="message" {...register('message')} />
+//       </div>
+//       <Button type="submit" disabled={formState.isSubmitting}>
+//         {formState.isSubmitting ? <><p>Adicionando...</p><LoadingSpinner /></> : "Adicionar mensagem"}
+//       </Button>
+//     </form>
+//   )
+// }

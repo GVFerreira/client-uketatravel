@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from "next/navigation"
 
 import { useState, useEffect } from "react"
 
@@ -9,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 
 export default function PaymentsTable({ data }: { data: GetPaymentsResponse[]}) {
@@ -18,11 +18,9 @@ export default function PaymentsTable({ data }: { data: GetPaymentsResponse[]}) 
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
   const [paymentFilter, setPaymentFilter] = useState<string | null>(null)
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [limit, setLimit] = useState(20)
+  const [limit, setLimit] = useState(25)
   const [page, setPage] = useState(1)
   const [filteredPayments, setFilteredPayments] = useState<GetPaymentsResponse[] | []>([])
-
-  const router = useRouter()
 
   useEffect(() => {
     let results = data
@@ -53,10 +51,9 @@ export default function PaymentsTable({ data }: { data: GetPaymentsResponse[]}) 
   }, [data, search, statusFilter, paymentFilter, sortOrder, limit, page])
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)
-  const handleStatusFilter = (option: any) => setStatusFilter(option ? option.value : null)
-  const handlePaymentFilter = (option: any) => setPaymentFilter(option ? option.value : null)
+  const handleStatusFilter = (option: string | null) => setStatusFilter(option === 'all' ? null : option)
   const toggleSortOrder = () => setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'))
-  const handleLimitChange = (option: any) => setLimit(option.value)
+  const handleLimitChange = (option: string | null) => setLimit(option ? parseInt(option) : 25)
 
   const traduzirStatusPagamento = (status: string) => {
     const statusMap: Record<string, { label: string; color: string }> = {
@@ -68,13 +65,6 @@ export default function PaymentsTable({ data }: { data: GetPaymentsResponse[]}) 
   
     return statusMap[status.toLowerCase()] || { label: status, color: "bg-gray-100 text-gray-800" }
   }
-
-  function capitalizeWords(str: string) {
-    return str
-      .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-  }   
   
   return (
     <div className="px-8 space-y-12">
@@ -99,30 +89,33 @@ export default function PaymentsTable({ data }: { data: GetPaymentsResponse[]}) 
 
         <div className="flex flex-col space-y-2 items-start">
           <Label>Status de pagamento:</Label>
-          {/* <Select
-            options={[
-              { value: "Pago", label: "Pago"},
-              { value: "Pendente", label: "Pendente"},
-              { value: "Cancelado", label: "Cancelado"}
-            ]}
-            placeholder="Filtrar pagamento"
-            onChange={handlePaymentFilter}
-          /> */}
+          <Select onValueChange={handleStatusFilter} defaultValue="all">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filtrar status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas os pagamentos</SelectItem>
+              <SelectItem value="Aprovado">Aprovado</SelectItem>
+              <SelectItem value="Negado">Negado</SelectItem>
+              <SelectItem value="Pagamento pendente">Pagamento pendente</SelectItem>
+              <SelectItem value="Falha ao gerar Pix">Falha ao gerar Pix</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-col space-y-2 items-start">
           <Label>Limite por página</Label>
-          {/* <Select
-            options={[
-              { value: 5, label: "5" },
-              { value: 10, label: "10" },
-              { value: 20, label: "20" },
-              { value: 50, label: "50" }
-            ]}
-            placeholder="Limite por página"
-            defaultValue={{ value: 20, label: "20" }}
-            onChange={handleLimitChange}
-          /> */}
+          <Select onValueChange={handleLimitChange} defaultValue="25">
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filtrar pagamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="5">5</SelectItem>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="25">25</SelectItem>
+              <SelectItem value="50">50</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-col space-y-2 items-start">
@@ -153,8 +146,8 @@ export default function PaymentsTable({ data }: { data: GetPaymentsResponse[]}) 
             <div>
               {
                 payment.solicitations.map((customer, index) => (
-                  <p key={index}>
-                    {capitalizeWords(`${customer.solicitations.name} ${customer.solicitations.surname}`)}
+                  <p key={index} className="capitalize">
+                    {`${customer.solicitations.name} ${customer.solicitations.surname}`}
                   </p>
                 ))
               }
