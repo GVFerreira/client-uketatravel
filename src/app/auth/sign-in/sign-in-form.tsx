@@ -5,7 +5,6 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { SignIn } from "./actions"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
@@ -28,19 +27,27 @@ export default function SignInForm() {
 
   async function handleSubmit(data: z.infer<typeof signInSchema>) {
     try {
-      const result = await SignIn(data)
-
+      const res = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+  
+      const result = await res.json()
+  
       if (result.success) {
         router.push('/admin')
       } else {
         setError('Credenciais inválidas')
       }
-
+  
     } catch (e: any) {
-      setError(e)
+      console.error("Erro inesperado ao logar", e)
+      setError('Erro inesperado')
     }
-
-  }
+  }  
 
   return (
     <Form {...form}>
