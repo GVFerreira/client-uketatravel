@@ -22,6 +22,7 @@ export async function SignIn(data: SignInRequest) {
         email,
         password
       },
+      hooks: undefined
     }).json()
 
     const cookieStore = await cookies()
