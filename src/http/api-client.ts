@@ -6,21 +6,22 @@ export const api = ky.create({
   hooks: {
     beforeRequest: [
       async (request) => {
-        let token: string | undefined
+        try {
+          let token: string | undefined
 
-        if (typeof window === 'undefined') {
-          const { cookies: getServerCookies } = await import('next/headers')
-
-          const cookieStore = await getServerCookies()
-          token = cookieStore.get('auth-token')?.value
+          if (typeof window === 'undefined') {
+            const { cookies: getServerCookies } = await import('next/headers')
+            const cookieStore = await getServerCookies()
+            token = cookieStore.get('auth-token')?.value
+          } else {
+            token = getCookie('auth-token') as string | undefined
+          }
 
           if (token) {
             request.headers.set('Authorization', `Bearer ${token}`)
           }
-
-        } else {
-          token = getCookie('auth-token') as string | undefined
-
+        } catch (error) {
+          console.error("Erro ao configurar token no header", error)
         }
 
       }
