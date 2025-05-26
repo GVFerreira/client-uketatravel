@@ -13,7 +13,9 @@ export async function POST(req: NextRequest) {
       })
       .json<{ token: string }>()
 
-      const teste = await fetch('https://website-ukvistos-server.usmpj4.easypanel.host/test')
+      const teste = await fetch('https://website-ukvistos-server.usmpj4.easypanel.host/test', {
+        method: 'POST',
+      })
       console.log(await teste.json())
 
       const cookieStore = await cookies()
