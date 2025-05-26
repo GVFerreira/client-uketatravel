@@ -9,9 +9,12 @@ export async function POST(req: NextRequest) {
 
     const response = await api
       .post('sessions/password', {
-        json: { email, password },
+        json: { email, password }
       })
       .json<{ token: string }>()
+
+      const teste = await fetch('https://website-ukvistos-server.usmpj4.easypanel.host/test')
+      console.log(await teste.json())
 
       const cookieStore = await cookies()
       cookieStore.set('auth-token', response.token, {
