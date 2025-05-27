@@ -13,16 +13,13 @@ export async function POST(req: NextRequest) {
       })
       .json<{ token: string }>()
 
-      const teste = await fetch('https://website-ukvistos-server.usmpj4.easypanel.host/test', {
-        method: 'POST',
-      })
-      console.log(await teste.json())
-
       const cookieStore = await cookies()
       cookieStore.set('auth-token', response.token, {
         path: "/",
         maxAge: 60 * 60 * 24 * 3
       })
+
+      console.log(cookieStore.get('auth-token'))
 
     return NextResponse.json({ success: true })
   } catch (err) {
