@@ -11,33 +11,54 @@ import Autoplay from "embla-carousel-autoplay"
 export default function Testemonial() {
   const testemonials = [
     {
-      name: "Sarah Johnson",
-      location: "United States",
+      name: "Lucas V.",
+      location: "Recife / PE",
       quote:
-        "The process was incredibly smooth. I received my UK ETA within 24 hours and had no issues during my trip to London. Highly recommend!",
-      rating: 5,
-    },
-    {
-      name: "Takashi Yamamoto",
-      location: "Japan",
-      quote:
-        "As a frequent business traveler to the UK, this service has saved me so much time. The support team was very helpful when I had questions.",
-      rating: 5,
-    },
-    {
-      name: "Maria Garcia",
-      location: "Spain",
-      quote:
-        "I was worried about making mistakes on my application, but the review service caught an error I would have missed. Worth every penny!",
+        "O processo foi incrivelmente tranquilo. Recebi minha ETA do Reino Unido em menos de 24 horas e não tive nenhum problema durante minha viagem a Londres. Recomendo muito!",
       rating: 4,
     },
     {
-      name: "Maria Garcia",
-      location: "Spain",
+      name: "Thiago C.",
+      location: "Porto Alegre / RS",
       quote:
-        "I was worried about making mistakes on my application, but the review service caught an error I would have missed. Worth every penny!",
+        "Eu estava preocupado em cometer erros na minha aplicação, mas o serviço de revisão identificou um erro que eu teria deixado passar. Valeu cada centavo!",
+      rating: 5,
+    },
+    {
+      name: "Felipe R.",
+      location: "Brasília / DF",
+      quote:
+        "Como viajante frequente a negócios para o Reino Unido, esse serviço me economizou muito tempo. A equipe de suporte foi muito prestativa quando tive dúvidas.",
+      rating: 5,
+    },
+    {
+      name: "Renata A.",
+      location: "Curitiba / PR",
+      quote:
+        "O atendimento foi excelente do início ao fim. Tiraram todas as minhas dúvidas por e-mail e ainda revisaram meu formulário antes do envio. Me senti muito mais seguro.",
+      rating: 5,
+    },
+    {
+      name: "Mariana T.",
+      location: "São Paulo / SP",
+      quote:
+        "Tive um problema com um dado que preenchi errado, mas a equipe detectou antes do envio e me ajudou a corrigir. Se não fosse por isso, eu teria perdido tempo e dinheiro.",
+      rating: 5,
+    },
+    {
+      name: "Lucas M.",
+      location: "Belo Horizonte / MG",
+      quote:
+        "Excelente custo-benefício. Paguei pelo serviço com revisão e valeu cada centavo. Tudo aprovado rapidamente e sem dor de cabeça.",
       rating: 4,
     },
+    {
+      name: "Maria G.",
+      location: "Fortaleza / CE",
+      quote:
+        "O processo todo levou menos de um dia. Recebi minha ETA e já estava com tudo pronto para embarcar. Atendimento rápido, claro e muito eficiente.",
+      rating: 5,
+    }
   ]
 
   return (

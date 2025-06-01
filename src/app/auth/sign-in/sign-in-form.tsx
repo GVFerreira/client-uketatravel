@@ -62,7 +62,7 @@ export default function SignInForm() {
                 <Input
                   {...field}
                   type="email"
-                  placeholder="email@uketatravel.com"
+                  placeholder="email@ukvistos.com"
                 />
               </FormControl>
               <FormMessage />

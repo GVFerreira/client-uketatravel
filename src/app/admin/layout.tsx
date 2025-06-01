@@ -24,7 +24,7 @@ import { auth } from '@/auth/auth'
 import SwitchTheme from './_components/switch-theme'
 
 export const metadata: Metadata = {
-  title: "Admin - UK ETA Travel",
+  title: "Admin - UK ETA Vistos",
 }
 
 export const revalidate = 0

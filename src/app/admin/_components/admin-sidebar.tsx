@@ -2,12 +2,11 @@
 
 import Link from 'next/link'
 
-import { CircleDollarSign, Home, ScrollText, User } from 'lucide-react'
+import { Home, ReceiptText, Tickets, User } from 'lucide-react'
 import Logotype from '@/app/(main)/_components/logotype'
-import { useTheme } from 'next-themes'
+import UpdateDolar from './update-dolar-popover'
 
 export function AdminSidebar() {
-  const { theme, setTheme } = useTheme()
 
   return (
     <div className="border-r bg-muted lg:block">
@@ -27,21 +26,22 @@ export function AdminSidebar() {
               Início
             </Link>
             <Link
-              className="flex items-center gap-3 rounded-lg px-3  transition-all hover:text-muted-foreground"
+              className="flex items-center gap-3 rounded-lg px-3 transition-all hover:text-muted-foreground"
               href="/admin/solicitacao"
             >
-              <ScrollText className="size-5" />
+              <Tickets className="size-5" />
               Solicitações
             </Link>
             <Link
-              className="flex items-center gap-3 rounded-lg px-3  transition-all hover:text-muted-foreground"
+              className="flex items-center gap-3 rounded-lg px-3 transition-all hover:text-muted-foreground"
               href="/admin/pagamento"
             >
-              <CircleDollarSign className="size-5" />
+              <ReceiptText className="size-5" />
               Pagamentos
             </Link>
+            <UpdateDolar />
             <Link
-              className="flex items-center gap-3 rounded-lg px-3  transition-all hover:text-muted-foreground"
+              className="flex items-center gap-3 rounded-lg px-3 transition-all hover:text-muted-foreground"
               href="/admin/usuario"
             >
               <User className="size-5" />
