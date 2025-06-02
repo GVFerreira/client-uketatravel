@@ -137,7 +137,7 @@ export default function SolicitationsTable({ data }: { data: GetSolicitationsRes
         {filteredSolicitations.map((solicitation, index) => (
           <div key={index} className="border-t border-t-muted-foreground">
             <div className="flex justify-between items-center py-2 px-6 bg-muted">
-              <h2 className="font-bold text-2xl capitalize">{`         ${solicitation.name} ${solicitation.surname}`}</h2>
+              <h2 className="font-bold text-2xl capitalize">{`${solicitation.name} ${solicitation.surname}`}</h2>
               <div className="text-right">
                 <span className="text-sm">Criado: {new Date(solicitation.createdAt).toLocaleString("pt-br")}</span> <br />
                 <span className="text-sm">Atualizado: {new Date(solicitation.updatedAt).toLocaleString("pt-br")}</span>
@@ -146,7 +146,7 @@ export default function SolicitationsTable({ data }: { data: GetSolicitationsRes
             <div className="bg-muted-foreground/10 flex flex-row justify-between items-center py-2 px-6">
               <div className="w-[100px] h-[133px] aspect-[3/4] border-2 bg-muted-foreground flex items-center justify-center">
                 { solicitation.profilePhotoUrl ?
-                  <Image src={`http://localhost:3000/${solicitation.profilePhotoUrl}`} width={300} height={300} alt={solicitation.name + solicitation.surname} />
+                  <Image src={`/${solicitation.profilePhotoUrl}`} width={300} height={300} alt={solicitation.name + solicitation.surname} />
                   :
                   <div >
                     <p className="text-center text-foreground">Sem<br />imagem</p>
