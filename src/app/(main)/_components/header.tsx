@@ -38,12 +38,6 @@ export default function Header () {
             Benefícios
           </Link>
           <Link
-            href="/minha-solicitacao"
-            className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
-          >
-            Minha ETA
-          </Link>
-          <Link
             href="/#faq"
             className="text-sm font-medium hover:text-blue-600 dark:hover:text-blue-500 transition-colors"
           >
