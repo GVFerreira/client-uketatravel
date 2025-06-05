@@ -1,18 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/passport-uploads/:path*',
-        destination: '/api/passport-uploads/:path*'
-      },
-      {
-        source: '/photo-uploads/:path*',
-        destination: '/api/photo-uploads/:path*'
-      },
-    ]
-  },
   images: {
     remotePatterns: [
       {
@@ -24,6 +12,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'ukvistos.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'website-ukvistos-minio.usmpj4.easypanel.host',
         port: '',
         pathname: '/**',
       },

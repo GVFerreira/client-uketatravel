@@ -146,7 +146,7 @@ export default function SolicitationsTable({ data }: { data: GetSolicitationsRes
             <div className="bg-muted-foreground/10 flex flex-row justify-between items-center py-2 px-6">
               <div className="w-[100px] h-[133px] aspect-[3/4] border-2 bg-muted-foreground flex items-center justify-center">
                 { solicitation.profilePhotoUrl ?
-                  <Image src={`/${solicitation.profilePhotoUrl}`} width={300} height={300} alt={solicitation.name + solicitation.surname} />
+                  <Image src={solicitation.profilePhotoUrl} width={300} height={300} alt={solicitation.name + solicitation.surname} className="w-full h-full"/>
                   :
                   <div >
                     <p className="text-center text-foreground">Sem<br />imagem</p>

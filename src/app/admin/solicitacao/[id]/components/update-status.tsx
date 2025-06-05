@@ -7,9 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { toast } from "sonner"
-import { Input } from "@/components/ui/input"
 import { updateStatus } from "../../actions"
 
 interface updateStatus {
@@ -29,9 +27,6 @@ const formSchema = z.object({
 })
 
 export default function UpdateStatus({data}: {data: updateStatus}) {
-  const [attachment, setAttachment] = useState<string | null>(null)
-  const [checkStatusEta, setCheckStatusEta] = useState<boolean>(false)
-
   const router = useRouter( )
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,64 +39,19 @@ export default function UpdateStatus({data}: {data: updateStatus}) {
       passportNumber: data.passportNumber
     },
   })
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setAttachment(reader.result as string)
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  const handleStatusEta = (selectedOption: any) => {
-    if (selectedOption === "Aprovado" || selectedOption === "Recusado") {
-      setCheckStatusEta(true)
-    } else {
-      setCheckStatusEta(false)
-    }
-  }
   
   async function onSubmit(data: z.infer<typeof formSchema>) {
     try {
-      if(attachment) {
-        const blob = await (await fetch(attachment)).blob()
-        const formData = new FormData()
-        formData.append('file', blob, `${new Date().getTime()}_${data.passportNumber}_${data.name}.pdf`)
-  
-        const uploadResponse = await fetch('/api/upload-eta', {
-          method: 'POST',
-          body: formData
-        })
+      await updateStatus({
+        ...data,
+        attachmentPath: ""
+      })
 
-        const uploadData = await uploadResponse.json()
+      router.refresh()
 
-        if (uploadResponse.ok && uploadData.imagePath) {
-          await updateStatus({
-            ...data,
-            attachmentPath: uploadData.imagePath
-          })
-
-          router.refresh()
-
-          toast("Atualizado com sucesso", {
-            description: "O status desta solicitação foi atualizado com sucesso"
-          })
-        }
-      } else {
-        await updateStatus({
-          ...data,
-          attachmentPath: null
-        })
-
-        router.refresh()
-
-        toast("Atualizado com sucesso", {
-          description: "O status desta solicitação foi atualizado com sucesso"
-        })
-      }
+      toast("Atualizado com sucesso", {
+        description: "O status desta solicitação foi atualizado com sucesso"
+      })
     } catch(e) {
       console.log(e)
     }
@@ -117,12 +67,12 @@ export default function UpdateStatus({data}: {data: updateStatus}) {
             <FormItem>
               <FormLabel>Status da solicitação:</FormLabel>
               <FormControl>
-                <Select defaultValue={data.status || ""} onValueChange={handleStatusEta}>
+                <Select defaultValue={data.status || ""} onValueChange={(value) => { field.onChange(value) }}>
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Selecionar status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Em análise">Em análise</SelectItem>
+                    <SelectItem value="Solicitação em análise interna">Solicitação em análise interna</SelectItem>
                     <SelectItem value="Recebido pelo Governo UK">Recebido pelo Governo UK</SelectItem>
                     <SelectItem value="Aprovado">Aprovado</SelectItem>
                     <SelectItem value="Recusado">Recusado</SelectItem>
@@ -133,27 +83,6 @@ export default function UpdateStatus({data}: {data: updateStatus}) {
             </FormItem>
           )}
         />
-        { checkStatusEta &&
-            <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Anexo da solicitação:</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="file"
-                    accept="application/pdf"
-                    onChange={handleFileChange}
-                    required
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        }
 
         <Button type="submit">
           Atualizar status

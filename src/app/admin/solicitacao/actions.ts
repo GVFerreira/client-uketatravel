@@ -101,3 +101,18 @@ export async function updateEmail({ id, email }: {id: string, email: string}) {
     return null
   }
 }
+
+export async function deleteSolicitation({ id }: {id: string}) {
+  try {
+    const update = await api.delete('solicitation/delete', {
+      json: {
+        id
+      }
+    }).json()
+
+    return update
+  } catch(e) {
+    console.log(e)
+    return null
+  }
+}

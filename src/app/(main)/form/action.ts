@@ -1,9 +1,6 @@
 'use server'
 
 import { api } from "@/http/api-client"
-import path from 'path'
-import { writeFile } from "fs/promises"
-import { v4 as uuidv4 } from 'uuid'
 
 type Details = {
     name: string
@@ -88,26 +85,16 @@ export async function analyzePassport(imageBase64: string ) {
   return result
 }
 
-type Passport = {
+type UpdatePassport = {
   solicitationId: string
   imageBase64: string
 }
 
-export async function savePassport({ solicitationId, imageBase64 }: Passport ) {
-  const buffer = Buffer.from(imageBase64.replace(/^data:image\/\w+;base64,/, ''), 'base64')
-  const filename =  `${uuidv4()}.jpg`
-
-  const imagePath = path.join("passport-uploads/" + filename)
-  
-  await writeFile(
-    imagePath,
-    buffer
-  )
-
+export async function savePassport({ solicitationId, imageBase64 }: UpdatePassport ) {
   const result = await api.post<savePassportResponse>('solicitation/save-passport', {
     json: {
       solicitationId,
-      passportUrl: imagePath
+      imageBase64
     }
   }).json()
 
@@ -138,20 +125,10 @@ type Photo = {
 }
 
 export async function savePhoto({ solicitationId, imageBase64 }: Photo ) {
-  const buffer = Buffer.from(imageBase64.replace(/^data:image\/\w+;base64,/, ''), 'base64')
-  const filename =  `${uuidv4()}.jpg`
-
-  const imagePath = path.join("photo-uploads/" + filename)
-  
-  await writeFile(
-    imagePath,
-    buffer
-  )
-
   const result = await api.post<savePhotoResponse>('solicitation/save-photo', {
     json: {
       solicitationId,
-      photoUrl: imagePath
+      imageBase64
     }
   }).json()
 

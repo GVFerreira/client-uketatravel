@@ -38,6 +38,7 @@ import { Check, X, FileImage, User, CreditCard, Phone, Gavel, Pencil, Trash2 } f
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import UpdateStatus from "./components/update-status"
 import UpdateEmail from "./components/update-email"
+import Delete from "./components/delete"
 
 interface updateEmail {
   id: string
@@ -122,9 +123,26 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
               </AlertDialogContent>
             </AlertDialog>
             
-            <Button className="bg-red-600 hover:bg-red-500 transition-all">
-              <Trash2 className="size-4 text-red-100" />
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="bg-red-600 hover:bg-red-500 transition-all">
+                  <Trash2 className="size-4 text-red-100" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="p-4">
+                <AlertDialogHeader className="border-b py-2">
+                  <div className="flex justify-between items-center">
+                    <AlertDialogTitle className="text-2xl font-bold">Deletar solicitação</AlertDialogTitle>
+                    <AlertDialogCancel>
+                      <X className="size-6" />
+                    </AlertDialogCancel>
+                  </div>
+                </AlertDialogHeader>
+                <p className="capitalize"><b>Cliente: {`${solicitation.name} ${solicitation.surname}`}</b></p>
+                <p>Essa solicitação será excluída para sempre, as imagens do passaporte e foto pessoal também serão perdidas.</p>
+                <Delete data={{id: solicitation.id}}/>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
         <Badge className={`${getStatusColor(solicitation?.status)} text-lg`}>{solicitation.status}</Badge>
@@ -199,11 +217,11 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
                   <div className="border rounded-md p-2">
                     <p className="text-xs text-muted-foreground mb-1">Passaporte</p>
                     <div className="relative w-auto h-40 mx-auto aspect-[10/7] bg-gray-100 rounded-md overflow-hidden">
-                      <Image src={`/${solicitation.passaportUrl}`} alt="Passaporte" fill className=" object-cover" />
+                      <Image src={solicitation.passaportUrl} alt="Passaporte" fill className=" object-cover" />
                     </div>
                     <Button variant="link" className="w-full" asChild>
                       <a
-                        href={`/${solicitation.passaportUrl}`}
+                        href={solicitation.passaportUrl}
                         download
                       >
                         Donwload
@@ -216,7 +234,7 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
                     <p className="text-xs text-muted-foreground mb-1">Foto de Perfil</p>
                     <div className="relative w-auto h-40 mx-auto aspect-[3/4] bg-gray-100 rounded-md overflow-hidden">
                       <Image
-                        src={`/${solicitation.profilePhotoUrl}`}
+                        src={solicitation.profilePhotoUrl}
                         alt="Foto de Perfil"
                         fill
                         className="object-cover h-auto"
@@ -224,7 +242,7 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
                     </div>
                     <Button variant="link" className="w-full" asChild>
                       <a
-                        href={`/${solicitation.profilePhotoUrl}`}
+                        href={solicitation.profilePhotoUrl}
                         download
                       >
                         Donwload
@@ -464,84 +482,3 @@ export default async function SolicitationDetailsComponent({ id }: { id: string 
     </div>
   )
 }
-
-// function UpdateEmail({data}: {data: updateEmail}) {
-//   const { register, handleSubmit, formState } = useForm<updateEmail>()
-//   const router = useRouter()
-  
-//   const handleUpdateEmail: SubmitHandler<updateEmail> = async (data) => {
-//     try {
-//       await updateEmail(data)
-
-//       router.refresh()
-
-//       toast({
-//         variant: "success",
-//         title: "Atualizado com sucesso",
-//         description: "O e-mail deste cliente foi atualizado com sucesso"
-//       })
-//     } catch(e) {
-//       console.log(e)
-//       toast({
-//         variant: "destructive",
-//         title: "Erro",
-//         description: "Não foi possível atualizar o e-mail deste cliente"
-//       })
-//     }
-//   }
-
-//   return (
-//     <form className="space-y-4 pb-4 px-4" onSubmit={handleSubmit(handleUpdateEmail)}>
-//       <Input value={data.id} className="hidden" {...register('id')} />
-//       <div>
-//         <Label>E-mail atual</Label>
-//         <Input 
-//           defaultValue={data.email}
-//           {...register('email')}
-//         /> 
-//       </div>
-//       <Button type="submit" disabled={formState.isSubmitting}>
-//         {formState.isSubmitting ? <><p>Atualizando e-mail...</p><LoadingSpinner /></> : "Atualizar e-mail"}
-//       </Button>
-//     </form>
-//   )
-// }
-
-// function SendMessage({data}: {data: sendMessage}) {
-//   const { register, handleSubmit, formState } = useForm<sendMessage>()
-//   const router = useRouter()
-  
-//   const handleSendMessage: SubmitHandler<sendMessage> = async (data) => {
-//     try {
-//       await sendMessage(data)
-
-//       router.refresh()
-
-//       toast({
-//         variant: "success",
-//         title: "Mensagem adicionada",
-//         description: "A mensagem foi adicionada com sucesso"
-//       })
-//     } catch(e) {
-//       console.log(e)
-//       toast({
-//         variant: "destructive",
-//         title: "Erro",
-//         description: "Não foi possível atualizar o e-mail deste cliente"
-//       })
-//     }
-//   }
-
-//   return (
-//     <form className="p-4 space-y-4" onSubmit={handleSubmit(handleSendMessage)}>
-//       <Input value={data.id} className="hidden" {...register('id')} />
-//       <div>
-//         <Label htmlFor="message">Mensagem ao aplicante:</Label>
-//         <Textarea id="message" {...register('message')} />
-//       </div>
-//       <Button type="submit" disabled={formState.isSubmitting}>
-//         {formState.isSubmitting ? <><p>Adicionando...</p><LoadingSpinner /></> : "Adicionar mensagem"}
-//       </Button>
-//     </form>
-//   )
-// }
