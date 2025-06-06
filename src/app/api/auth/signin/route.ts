@@ -18,9 +18,6 @@ export async function POST(req: NextRequest) {
         path: "/",
         maxAge: 60 * 60 * 24 * 3
       })
-
-      console.log(cookieStore.get('auth-token'))
-
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('Erro ao autenticar:', err)

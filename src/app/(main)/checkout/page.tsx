@@ -97,7 +97,7 @@ export default function CheckoutPage() {
           </div>
 
           <div className="md:w-2/5">
-            <OrderSummary exchangeRate={checkoutInfo?.cotacaoVenda || 0} dateExchangeRate={checkoutInfo?.dataHoraCotacao || ""}/>
+            <OrderSummary />
           </div>
         </div>
       </main>

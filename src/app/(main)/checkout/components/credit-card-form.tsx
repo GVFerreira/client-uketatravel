@@ -38,9 +38,7 @@ const formSchema = z.object({
   expiryYear: z.string({
     required_error: "Este campo é obrigatório."
   }),
-  installment: z.string({
-    required_error: "Este campo é obrigatório."
-  })
+  installment: z.string()
 })
 
 type Props = {
@@ -199,14 +197,13 @@ export function CreditCardForm({ exchangeRate }: Props) {
               )}
             />
           </div>
-          <p>Validade</p>
           <div className="grid grid-cols-2 gap-8">
             <FormField
               control={form.control}
               name="expiryMonth"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mês</FormLabel>
+                  <FormLabel>Mês de validade</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl className="w-full">
                       <SelectTrigger>
@@ -233,7 +230,7 @@ export function CreditCardForm({ exchangeRate }: Props) {
               name="expiryYear"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ano</FormLabel>
+                  <FormLabel>Ano de validade</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl className="w-full">
                       <SelectTrigger>
@@ -256,30 +253,7 @@ export function CreditCardForm({ exchangeRate }: Props) {
               )}
             />
           </div>
-          <div className="grid grid-cols-2 gap-8">
-            <FormField
-              control={form.control}
-              name="installment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Parcelas</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl className="w-full">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                        <SelectItem value="1">
-                          1 x de R$ {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(exchangeRate * 59.9)}
-                        </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+          
           <div className="flex md:justify-end mt-8">
             <Button disabled={form.formState.isSubmitting}>
               {

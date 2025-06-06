@@ -23,6 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={roboto.className} suppressHydrationWarning>
+      <head>
+      <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
+      </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
