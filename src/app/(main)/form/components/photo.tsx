@@ -1,4 +1,4 @@
-import { Check, SquareUser, X } from "lucide-react"
+import { Check, Loader2, SquareUser, X } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -11,6 +11,7 @@ type Props = {
 
 export function Photo({ onSuccess }: Props) {
   const MAX_FILE_SIZE_MB = 4
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [error, setError] = useState<string[]>([])
 
@@ -58,19 +59,26 @@ export function Photo({ onSuccess }: Props) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const solicitationId = localStorage.getItem('solicitation_id')
+    setIsSubmitting(true)
 
-    if(imageSrc) {
-      const analyzePassportResponse = await analyzePhoto(imageSrc)
-      if(analyzePassportResponse.errors.length > 0) {
-        setError(analyzePassportResponse.errors)
-      } else {
-        if (solicitationId) {
-          await savePhoto({solicitationId, imageBase64: imageSrc})
-          onSuccess()
+    try {
+      const solicitationId = localStorage.getItem('solicitation_id')
+
+      if(imageSrc) {
+        const analyzePhotoResponse = await analyzePhoto(imageSrc)
+        if(analyzePhotoResponse.errors.length > 0) {
+          setError(analyzePhotoResponse.errors)
+        } else {
+          if (solicitationId) {
+            await savePhoto({solicitationId, imageBase64: imageSrc})
+            onSuccess()
+          }
         }
-      }
-    }  
+      }  
+    } finally {
+      setIsSubmitting(false)
+    }
+
   }
 
   return (
@@ -157,7 +165,7 @@ export function Photo({ onSuccess }: Props) {
         </div>
         <hr />
         <form onSubmit={handleSubmit} className="space-y-2">
-          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">Faça o envio da imagem do seu passaporte seguindo os requisitos acima.</h3>
+          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">Faça o envio da sua imagem seguindo os requisitos acima.</h3>
           <div 
             className="flex flex-col items-center justify-center w-full h-40 border-2 border-dotted border-gray-500 hover:cursor-pointer bg-nzwhite rounded-md"
             onDrop={handleDrop}
@@ -202,7 +210,16 @@ export function Photo({ onSuccess }: Props) {
             )
           }
           <div className="flex md:justify-end mt-8">
-            <Button disabled={imageSrc === null}>Próximo</Button>  
+            <Button disabled={isSubmitting || imageSrc === null}>
+              {isSubmitting ? (
+                <>
+                  Analisando foto...
+                  <Loader2 className="size-4 animate-spin" />
+                </>
+              ) : (
+                "Próximo"
+              )}
+            </Button> 
           </div>
         </form>
       </div>

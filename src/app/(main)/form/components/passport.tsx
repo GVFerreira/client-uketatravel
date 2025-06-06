@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, IdCard, X } from "lucide-react"
+import { Check, IdCard, Loader2, X } from "lucide-react"
 import Image from "next/image"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -12,6 +12,7 @@ type Props = {
 
 export function Passport({ onSuccess }: Props) {
   const MAX_FILE_SIZE_MB = 4
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [error, setError] = useState<string[]>([])
 
@@ -58,22 +59,28 @@ export function Passport({ onSuccess }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    const solicitationId = localStorage.getItem('solicitation_id')
-
-    if(imageSrc) {
-      const analyzePassportResponse = await analyzePassport(imageSrc)
-      if(analyzePassportResponse.errors.length > 0) {
-        setError(analyzePassportResponse.errors)
-      } else {
-        if (solicitationId) {
-          await savePassport({solicitationId, imageBase64: imageSrc})
-          onSuccess()
+  
+    setIsSubmitting(true)
+  
+    try {
+      const solicitationId = localStorage.getItem('solicitation_id')
+  
+      if (imageSrc) {
+        const analyzePassportResponse = await analyzePassport(imageSrc)
+  
+        if (analyzePassportResponse.errors.length > 0) {
+          setError(analyzePassportResponse.errors)
+        } else {
+          if (solicitationId) {
+            await savePassport({ solicitationId, imageBase64: imageSrc })
+            onSuccess()
+          }
         }
       }
+    } finally {
+      setIsSubmitting(false)
     }
-    
-  }
+  }  
 
   return (
     <>
@@ -181,7 +188,16 @@ export function Passport({ onSuccess }: Props) {
             )
           }
           <div className="flex md:justify-end mt-8">
-            <Button disabled={imageSrc === null}>Próximo</Button>  
+            <Button disabled={isSubmitting || imageSrc === null}>
+              {isSubmitting ? (
+                <>
+                  Analisando passporte...
+                  <Loader2 className="size-4 animate-spin" />
+                </>
+              ) : (
+                "Próximo"
+              )}
+            </Button> 
           </div>
         </form>
       </div>

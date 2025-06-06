@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { countries } from "./countries-list"
 import { saveDetails } from "../action"
+import { Loader2 } from "lucide-react"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -308,7 +309,17 @@ export function Details({ onSuccess }: Props) {
           />
         </div>
         <div className="flex md:justify-end mt-8">
-          <Button>Próximo</Button>  
+          <Button disabled={form.formState.isSubmitting}>
+            {
+              form.formState.isSubmitting ?
+                <>
+                  Salvando informações...
+                  <Loader2 className="size-4 animate-spin" />
+                </>
+                :
+                "Próximo"
+            }
+          </Button>  
         </div>
       </form>
     </Form>

@@ -27,6 +27,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { countries } from './countries-list'
 import { saveQuestions } from "../action"
 import { useState } from "react"
+import { Loader2 } from "lucide-react"
 
 export const formSchema = z.object({
   hasOtherNationality: z.enum(["true", "false"]),
@@ -614,7 +615,17 @@ export function Questions({ onSuccess }: Props) {
           }
 
         </div>
-        <Button type="submit">Próximo</Button>
+        <Button disabled={form.formState.isSubmitting}>
+          {
+            form.formState.isSubmitting ?
+              <>
+                Salvando informações...
+                <Loader2 className="size-4 animate-spin" />
+              </>
+              :
+              "Próximo"
+          }
+        </Button>
       </form>
     </Form>
   )
