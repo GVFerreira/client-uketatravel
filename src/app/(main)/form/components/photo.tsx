@@ -67,20 +67,53 @@ export function Photo({ onSuccess }: Props) {
 
   const capturePhoto = () => {
     if (canvasRef.current && videoRef.current && isVideoPlaying) {
-      const context = canvasRef.current.getContext('2d')
+      const video = videoRef.current
+      const canvas = canvasRef.current
+      const context = canvas.getContext('2d')
+  
+      const videoWidth = video.videoWidth
+      const videoHeight = video.videoHeight
+  
+      // Definir proporção desejada
+      const targetAspect = 3 / 4
+  
+      // Calcular dimensões da área central com proporção 3:4
+      let cropWidth = videoWidth
+      let cropHeight = cropWidth / targetAspect
+  
+      if (cropHeight > videoHeight) {
+        cropHeight = videoHeight
+        cropWidth = cropHeight * targetAspect
+      }
+  
+      const cropX = (videoWidth - cropWidth) / 2
+      const cropY = (videoHeight - cropHeight) / 2
+  
+      // Ajustar o canvas para o tamanho do recorte
+      canvas.width = cropWidth
+      canvas.height = cropHeight
+  
       if (context) {
-        canvasRef.current.width = videoRef.current.videoWidth
-        canvasRef.current.height = videoRef.current.videoHeight
-        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height)
-        const imageData = canvasRef.current.toDataURL('image/png')
+        // Espelhar horizontalmente, como o vídeo
+        context.translate(cropWidth, 0)
+        context.scale(-1, 1)
+  
+        // Desenhar a área central proporcional
+        context.drawImage(
+          video,
+          cropX, cropY, cropWidth, cropHeight,  // área a capturar do vídeo
+          0, 0, cropWidth, cropHeight           // área a desenhar no canvas
+        )
+  
+        const imageData = canvas.toDataURL('image/png')
         setImageSrc(imageData)
       } else {
-        setError(['Ocorreu um erro ao tentar capturar a foto.'])
+        setError(['Erro ao acessar o canvas para capturar a imagem.'])
       }
     } else {
-      setError(['A câmera não está pronta para capturar a foto.'])
+      setError(['A câmera não está pronta para capturar a imagem.'])
     }
-  }
+  }  
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
