@@ -1,7 +1,10 @@
+'use client'
+
 import { Check, Loader2, SquareUser, X } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { analyzePhoto, savePhoto } from "../action"
 
 
@@ -14,6 +17,70 @@ export function Photo({ onSuccess }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const [error, setError] = useState<string[]>([])
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [stream, setStream] = useState<MediaStream | null>(null)
+  const [tabValue, setTabValue] = useState("take")
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    if (tabValue === "take") {
+      startCamera()
+    } else {
+      stopCamera()
+    }
+  }, [tabValue])
+
+  useEffect(() => {
+    return () => {
+      stopCamera()
+    }
+  }, [])
+
+  const startCamera = async () => {
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true })
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream
+        setStream(mediaStream)
+        videoRef.current.onplaying = () => setIsVideoPlaying(true)
+        await videoRef.current.play()
+        setError([])
+      }
+    } catch (error) {
+      console.error('Erro ao acessar a câmera:', error)
+      setError(['Não foi possível acessar a câmera.'])
+    }
+  }
+
+  const stopCamera = () => {
+    const videoElement = videoRef.current
+    if (videoElement?.srcObject) {
+      const mediaStream = videoElement.srcObject as MediaStream
+      mediaStream.getTracks().forEach(track => track.stop())
+      videoElement.srcObject = null
+      setStream(null)
+      setIsVideoPlaying(false)
+      console.log("Câmera parada com sucesso.")
+    }
+  }
+
+  const capturePhoto = () => {
+    if (canvasRef.current && videoRef.current && isVideoPlaying) {
+      const context = canvasRef.current.getContext('2d')
+      if (context) {
+        canvasRef.current.width = videoRef.current.videoWidth
+        canvasRef.current.height = videoRef.current.videoHeight
+        context.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height)
+        const imageData = canvasRef.current.toDataURL('image/png')
+        setImageSrc(imageData)
+      } else {
+        setError(['Ocorreu um erro ao tentar capturar a foto.'])
+      }
+    } else {
+      setError(['A câmera não está pronta para capturar a foto.'])
+    }
+  }
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -58,7 +125,6 @@ export function Photo({ onSuccess }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     setIsSubmitting(true)
 
     try {
@@ -71,6 +137,7 @@ export function Photo({ onSuccess }: Props) {
         } else {
           if (solicitationId) {
             await savePhoto({solicitationId, imageBase64: imageSrc})
+            stopCamera() 
             onSuccess()
           }
         }
@@ -166,23 +233,44 @@ export function Photo({ onSuccess }: Props) {
         <hr />
         <form onSubmit={handleSubmit} className="space-y-2">
           <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight mb-4">Faça o envio da sua imagem seguindo os requisitos acima.</h3>
-          <div 
-            className="flex flex-col items-center justify-center w-full h-40 border-2 border-dotted border-gray-500 hover:cursor-pointer bg-nzwhite rounded-md"
-            onDrop={handleDrop}
-            onDragOver={handleDragOver}
-          >
-            <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
-              <SquareUser className="size-12" />
-              <span className="mt-2 text-muted-foreground">Clique ou arraste a imagem aqui.</span>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-                required
-              />
-            </label>
-          </div>
+          <Tabs value={tabValue} onValueChange={setTabValue} className="mx-auto md:w-1/2 flex flex-col justify-center items-center">
+            <TabsList className="w-full">
+              <TabsTrigger value="take" className="w-1/2">Usar câmera</TabsTrigger>
+              <TabsTrigger value="photo" className="w-1/2">Carregar uma foto</TabsTrigger>
+            </TabsList>
+            <TabsContent value="take" className="w-full flex flex-col items-center">
+              <p>Ajuste o seu rostos ao enquadramento e pressione o botão &quot;Tirar Foto&quot;.</p>
+              <div className="relative w-full aspect-[3/4] mt-4 rounded-md overflow-hidden bg-gray-200">
+                {/* Vídeo */}
+                <video
+                  ref={videoRef}
+                  className="w-full h-full object-cover transform -scale-x-100"
+                  playsInline
+                ></video>
+
+                {/* Máscara oval */}
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                  <div className="w-64 h-96 rounded-full border-4 border-white/80 backdrop-brightness-75" />
+                </div>
+              </div>
+
+              <canvas ref={canvasRef} className="hidden"></canvas>
+              <Button className="mt-4" type="button" onClick={capturePhoto}>Tirar Foto</Button>
+            </TabsContent>
+            <TabsContent value="photo" className="w-full">
+              <div
+                className="flex flex-col items-center justify-center w-full h-40 border-2 border-dotted border-gray-500 hover:cursor-pointer bg-nzwhite rounded-md"
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+              >
+                <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer">
+                  <SquareUser className="size-12" />
+                  <span className="mt-2 text-muted-foreground">Clique ou arraste a imagem aqui.</span>
+                  <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" required />
+                </label>
+              </div>
+            </TabsContent>
+          </Tabs>
           {
             imageSrc && (
               <div className="w-full flex flex-col items-center gap-2 mt-4">
@@ -190,7 +278,7 @@ export function Photo({ onSuccess }: Props) {
                 <Image
                   src={imageSrc}
                   alt="Preview da imagem"
-                  className="md:w-1/3 w-full aspect-[3/4] object-cover border border-muted-foreground"
+                  className="md:w-1/3 w-full aspect-[3/4] object-cover border border-muted-foreground transform -scale-x-100"
                   width={300}
                   height={400}
                 />
