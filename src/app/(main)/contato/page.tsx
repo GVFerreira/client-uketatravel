@@ -9,7 +9,7 @@ export default function Contact () {
       <Header />
       <main className="flex-1">
         {/* Contact Section */}
-        <section className="py-20 bg-background">
+        <section className="py-20 mx-4 bg-background">
           <div className="container m-auto">
             <div className="grid md:grid-cols-2 gap-12 items-start">
             <div className="bg-muted p-8 rounded-lg">

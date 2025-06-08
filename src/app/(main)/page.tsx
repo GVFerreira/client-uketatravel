@@ -60,12 +60,11 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-
       <main className="flex-1">
         {/* Hero Section */}
         <section className="relative py-20 bg-gradient-to-b from-blue-50 to-transparent dark:from-blue-950/20 dark:to-transparent">
           <div
-            className="container shadow-2xl rounded-3xl md:pt-16 md:pb-56 flex flex-col items-center text-center mx-auto"
+            className="container mx-auto p-4 shadow-2xl rounded-3xl md:pt-16 md:pb-56 flex flex-col items-center text-center"
             style={{background: "url(/backgrounds/teste.png) center center no-repeat", backgroundSize: "cover", backgroundPositionY: "0px"}}
           >
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight max-w-3xl">
@@ -89,7 +88,7 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
-            <div className="mt-10 flex items-center justify-center gap-8 text-sm text-muted-foreground">
+            <div className="my-10 flex items-center justify-center flex-wrap gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-blue-600 dark:text-blue-500" />
                 <span className="text-black dark:text-white">Suporte 24/7</span>
@@ -114,7 +113,7 @@ export default function Home() {
         </section>
 
         {/* How It Works Section */}
-        <section id="how-it-works" className="py-20 bg-background">
+        <section id="how-it-works" className="py-20 px-4 bg-background">
           <div className="container mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold">Como solicitar o ETA?</h2>
@@ -155,7 +154,7 @@ export default function Home() {
         </section>
 
         {/* Eligibility Section */}
-        <section id="eligibility" className="py-20 bg-background">
+        <section id="eligibility" className="py-20 px-4 bg-background">
           <div className="container mx-auto">
             <div className="grid md:grid-cols-2 gap-12">
               <div>
@@ -203,7 +202,7 @@ export default function Home() {
         </section>
 
         {/* ETA Guide */}
-        <section id="guide" className="py-20">
+        <section id="guide" className="py-20 px-4">
           <div className="container mx-auto">
             <UKEtaGuide />
           </div>
@@ -219,7 +218,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="mx-4 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {allBenefits.map((item, index) => (
                 <Card
                   key={index}
@@ -240,7 +239,7 @@ export default function Home() {
         {/* Testimonials Section */}
         <section className="py-20 bg-background">
           <div className="container mx-auto">
-            <div className="text-center mb-16">
+            <div className="text-center mx-4 mb-16">
               <h2 className="text-3xl md:text-4xl font-bold">O que nossos clientes dizem</h2>
               <p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
                 Se junte a milhares de viajantes que usaram nossos serviços.
@@ -267,9 +266,9 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20">
+        <section className="py-20 px-4">
           <div
-            className="container shadow-2xl max-w-6xl rounded-3xl md:pt-16 md:pb-56 flex flex-col items-center text-center mx-auto" 
+            className="container p-4 shadow-2xl max-w-6xl rounded-3xl md:pt-16 md:pb-56 flex flex-col items-center text-center mx-auto" 
             style={{background: "url(/backgrounds/footer.webp) bottom center no-repeat", backgroundSize: "cover"}}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-black">Está pronto para solicitar sua ETA?</h2>
@@ -310,7 +309,7 @@ export default function Home() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 bg-muted/50">
+        <section id="faq" className="py-20 px-4 bg-muted/50">
           <div className="container mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold">Perguntas frequentes</h2>
@@ -331,7 +330,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   )
