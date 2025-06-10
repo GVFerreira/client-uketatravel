@@ -29,8 +29,8 @@ export default function FAQuestions() {
       answer: "O ETA do Reino Unido é uma autorização eletrônica de viagem, servindo como um pré-requisito necessário para a entrada de cidadãos de países que estão isentos de obter um visto do Reino Unido, não um e-visa do Reino Unido. Isso difere do eVisa do Reino Unido, que é um registro online detalhando o status de imigração de um viajante e as condições de sua permissão para entrar ou permanecer no Reino Unido."
     },
     {
-      question: "A WIS DIGITAL é responsável pela emissão do ETA do Reino Unido?",
-      answer: "Não! A WIS DIGITAL é uma empresa privada e uma agência de viagens registrada, devidamente certificada pelo Ministério do Turismo – Cadastur, conforme evidenciado pela certificação disponível neste link. Entre outros serviços, auxiliamos nossos clientes com a emissão e renovação de ETAs para o Reino Unido. Nosso serviço consiste em organizar e revisar documentação, processar pagamentos de taxas e agendar consultas para emissão de passaporte. Supervisionamos todas as etapas necessárias para garantir um processo rápido e eficiente para nossos clientes."
+      question: "A PASSAPORTE SIMPLES é responsável pela emissão do ETA do Reino Unido?",
+      answer: "Não! A PASSAPORTE SIMPLES é uma empresa privada e uma agência de viagens registrada, devidamente certificada pelo Ministério do Turismo – Cadastur, conforme evidenciado pela certificação disponível neste link. Entre outros serviços, auxiliamos nossos clientes com a emissão e renovação de ETAs para o Reino Unido. Nosso serviço consiste em organizar e revisar documentação, processar pagamentos de taxas e agendar consultas para emissão de passaporte. Supervisionamos todas as etapas necessárias para garantir um processo rápido e eficiente para nossos clientes."
     },
     {
       question: "Esta atividade é legal?",

@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function OrderSummary() {
   const orderItems = [
-    { id: 1, name: "Taxa do Governo", price: 12.9 },
+    { id: 1, name: "Taxa do Governo", price: 21.6 },
     { id: 2, name: "Outras taxas", price: 47 },
   ]
 

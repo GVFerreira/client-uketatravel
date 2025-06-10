@@ -28,7 +28,7 @@ export default function TermsConditions() {
         <hr />
         <div>
           <h2 className="text-4xl font-bold mb-4">2. Taxas</h2>
-          <p>A taxa cobrada pelo governo britânico para emissão da ETA é de <b>USD 12,90</b>, paga diretamente ao site
+          <p>A taxa cobrada pelo governo britânico para emissão da ETA é de <b>USD 21,60</b>, paga diretamente ao site
           oficial.</p>
           <p>Nosso serviço de assistência possui uma taxa de <b>USD 47,00</b>, que <b>não</b> está incluso a taxa do Governo,
           conforme informado no rodapé do site e durante o processo de checkout.</p>

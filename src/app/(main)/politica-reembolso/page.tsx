@@ -20,7 +20,7 @@ export default function PrivacyPolicy() {
           <p>Oferecemos <b>reembolso integral</b> da taxa de assistência <b>(USD 47,00)</b> caso a ETA seja recusada <b>mesmo após a verificação e preenchimento feitos por nossa equipe</b>.</p>
           <p><b>Importante:</b></p>
           <ul className="list-disc ml-6">
-            <li>A taxa de <b>USD 12,90</b> paga diretamente ao governo britânico não é reembolsável.</li>
+            <li>A taxa de <b>USD 21,60</b> paga diretamente ao governo britânico não é reembolsável.</li>
             <li>O reembolso <b>somente será realizado</b> se <b>não houver recusas anteriores</b> para a mesma
             pessoa (mesmo nome, passaporte e dados pessoais).</li>
           </ul>
