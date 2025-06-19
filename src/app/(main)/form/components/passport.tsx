@@ -38,7 +38,11 @@ export function Passport({ onSuccess }: Props) {
 
   const startCamera = async () => {
     try {
-      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true })
+      const mediaStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment"
+        }
+      })
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream
         setStream(mediaStream)
